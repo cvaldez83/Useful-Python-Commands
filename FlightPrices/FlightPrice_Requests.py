@@ -1,11 +1,11 @@
 import requests
 import time
-import bs4
-#from bs4 import BeautifulSoup as BS
+#import bs4
+from bs4 import BeautifulSoup
 
 def unitedPrice(URL,depDate,retDate):
     # Date format: 'Apr 1, 2018'
-    depTimeSelector = r'#sr_product_ECONOMY_91-2398\7c 875-UA > div > div.price-point.price-point-revised.use-roundtrippricing'
+    depTimeSelector = '.price-point.price-point-revised.use-roundtrippricing'
     headers = {
         'Content-Type':'application/x-www-form-urlencoded',
         'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.162 Safari/537.36',
@@ -48,9 +48,11 @@ def unitedPrice(URL,depDate,retDate):
     res = requests.get(URL, headers=headers, params=payload)
     print('status code: ' + str(res.status_code))
     res.raise_for_status()
-    soup = bs4.BeautifulSoup(res.text, 'html.parser')
-    print(soup)
-    return soup.select(depTimeSelector)
+    #soup = BeautifulSoup(res.text, 'html.parser')
+    soup = BeautifulSoup(res.content,'html.parser')
+    print(soup.get_text())
+    #print(soup_content.select(depTimeSelector))
+    #return soup.select(depTimeSelector)
     #return elem[0].text.strip()
 
 unitedURL = 'https://www.united.com/ual/en/us/flight-search/book-a-flight'
